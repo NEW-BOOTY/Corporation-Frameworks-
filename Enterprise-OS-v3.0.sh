@@ -13,6 +13,7 @@
 # Consolidates all 8 corporate frameworks under a unified system with real audits, AI integrations,
 # embedded GUI, v2.0 architecture bootstrap, daemonization, packaging, and documentation generation.
 # Executes all features by default or via specific commands.
+# Fixed for macOS zsh/bash compatibility: Replaced associative array with case-based lookup.
 
 set -euo pipefail
 
@@ -29,17 +30,6 @@ AUDIT_LOG="${LOG_ROOT}/enterprise_os_audit_${TIMESTAMP}.log"
 
 # Corporate Frameworks (8 total)
 CORPORATE_FRAMEWORKS=("chimera" "sentry" "aegis" "veritas" "synergy" "clarity" "orchard" "connect")
-
-# Project Names Mapping
-declare -A PROJECT_NAMES
-PROJECT_NAMES["chimera"]="Project Chimera (Google)"
-PROJECT_NAMES["sentry"]="Project Sentry (Amazon)"
-PROJECT_NAMES["aegis"]="Project Aegis (Microsoft)"
-PROJECT_NAMES["veritas"]="Project Veritas (Oracle)"
-PROJECT_NAMES["synergy"]="Project Synergy (IBM)"
-PROJECT_NAMES["clarity"]="Project Clarity (OpenAI)"
-PROJECT_NAMES["orchard"]="Project Orchard (Apple)"
-PROJECT_NAMES["connect"]="Project Connect (Meta)"
 
 # Secure Vault for API Keys (uses macOS keychain or gpg on Linux)
 VAULT_SERVICE="enterprise-os-vault"
@@ -412,11 +402,29 @@ fn_build_docs() {
   log_audit "DOCS_BUILD" "Docs site generated."
 }
 
+# ------------- Framework Name Lookup (Replaces Associative Array) -------------
+
+fn_get_project_name() {
+  local project_id="$1"
+  case "${project_id}" in
+    chimera) echo "Project Chimera (Google)" ;;
+    sentry) echo "Project Sentry (Amazon)" ;;
+    aegis) echo "Project Aegis (Microsoft)" ;;
+    veritas) echo "Project Veritas (Oracle)" ;;
+    synergy) echo "Project Synergy (IBM)" ;;
+    clarity) echo "Project Clarity (OpenAI)" ;;
+    orchard) echo "Project Orchard (Apple)" ;;
+    connect) echo "Project Connect (Meta)" ;;
+    *) echo "Unknown Project (${project_id})" ;;
+  esac
+}
+
 # ------------- Framework Loading and Execution -------------
 
 fn_load_framework() {
   local project_id="$1"
-  log_info "Loading framework: ${PROJECT_NAMES[${project_id}]}"
+  local name="$(fn_get_project_name "${project_id}")"
+  log_info "Loading framework: ${name}"
   # In v3.0, frameworks are unified; no separate .conf needed.
 }
 
