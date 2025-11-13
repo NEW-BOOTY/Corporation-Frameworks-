@@ -1,0 +1,11 @@
+What does the project do:
+Audits training data, monitors model outputs, and enforces AI governance policies for OpenAI’s LLMs.
+
+What will the project do:
+Provide explainability dashboards, detect IP violations, and adapt to evolving AI regulations.
+
+What it can fix:
+Unintentional copyright generation, biased datasets, and opaque model decisions.
+
+What problem it will solve:
+Ensures OpenAI’s models are legally defensible, ethically sound, and trusted by enterprise and public stakeholders.

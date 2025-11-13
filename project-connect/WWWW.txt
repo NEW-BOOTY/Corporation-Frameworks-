@@ -1,0 +1,11 @@
+What does the project do:
+Enforces real-time content moderation, audits data usage, and reports algorithmic behavior across Meta’s platforms.
+
+What will the project do:
+Generate user safety metrics, adapt to global regulations, and provide transparency for internal and external audits.
+
+What it can fix:
+Policy violations, data misuse, and lack of algorithmic accountability.
+
+What problem it will solve:
+Restores user trust and regulatory compliance across Facebook, Instagram, and WhatsApp by embedding governance into platform operations.

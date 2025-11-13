@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('Bootstrap') {
+            steps {
+                sh './meta-builder.sh --bootstrap'
+            }
+        }
+        stage('Generate') {
+            steps {
+                sh './meta-builder.sh --generate'
+            }
+        }
+        stage('Compile') {
+            steps {
+                sh './meta-builder.sh --compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './meta-builder.sh --audit'
+            }
+        }
+    }
+}

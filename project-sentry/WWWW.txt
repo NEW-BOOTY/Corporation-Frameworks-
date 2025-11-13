@@ -1,0 +1,11 @@
+What does the project do:
+Monitors and scores operational risk across AWS microservices using real-time dependency analysis.
+
+What will the project do:
+Automate patch orchestration, blast radius analysis, and AWS-native integration for risk mitigation.
+
+What it can fix:
+Security vulnerabilities, outdated dependencies, and SLA-impacting service risks.
+
+What problem it will solve:
+Protects Amazon’s infrastructure by proactively managing open-source risks and ensuring platform reliability.

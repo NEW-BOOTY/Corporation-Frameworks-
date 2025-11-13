@@ -1,0 +1,11 @@
+load("@rules_go//go:def.bzl", "go_binary")
+
+go_binary(
+    name = "license_scanner",
+    srcs = ["src/license_scanner.go"],
+)
+
+go_binary(
+    name = "policy_engine",
+    srcs = ["src/policy_engine.go"],
+)

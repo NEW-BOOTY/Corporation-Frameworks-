@@ -1,0 +1,11 @@
+What does the project do:
+Generates AI model manifests, monitors bias, and provides audit trails for Microsoft’s AI/ML governance.
+
+What will the project do:
+Integrate with Azure to display compliance dashboards and enforce responsible AI policies.
+
+What it can fix:
+Opaque model development, ethical risks, and lack of traceability in AI pipelines.
+
+What problem it will solve:
+Ensures Microsoft’s AI products remain trusted, transparent, and legally defensible across the enterprise.

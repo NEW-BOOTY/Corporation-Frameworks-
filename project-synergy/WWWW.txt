@@ -1,0 +1,11 @@
+What does the project do:
+Creates immutable supply chain records, maps software flows to regulations, and scans multi-cloud environments.
+
+What will the project do:
+Predict future compliance risks using AI and provide verifiable trust for regulated industries.
+
+What it can fix:
+Unverifiable software provenance, regulatory blind spots, and multi-cloud security gaps.
+
+What problem it will solve:
+Establishes IBM Cloud as the most trusted and transparent platform for enterprise clients in regulated sectors.

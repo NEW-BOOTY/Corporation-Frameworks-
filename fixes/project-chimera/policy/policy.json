@@ -1,0 +1,12 @@
+{
+  "allowed_spdx": ["MIT", "BSD-2-Clause", "BSD-3-Clause", "Apache-2.0", "ISC"],
+  "deny_spdx": ["GPL-3.0", "AGPL-3.0"],
+  "exceptions": [
+    {
+      "artifact": "org.example:legacy-lib",
+      "spdx": "GPL-3.0",
+      "expires": "2026-01-01",
+      "owner": "Legal-OSPO"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+What does the project do:
+Audits Oracle software usage, analyzes code performance, and monitors hybrid cloud deployments.
+
+What will the project do:
+Automate license compliance, optimize PL/SQL logic, and ensure visibility across OCI and on-prem systems.
+
+What it can fix:
+License violations, inefficient stored procedures, and blind spots in hybrid infrastructure.
+
+What problem it will solve:
+Prevents costly audit penalties and maximizes performance across Oracle’s enterprise stack.

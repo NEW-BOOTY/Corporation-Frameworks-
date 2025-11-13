@@ -1,0 +1,11 @@
+load("@io_bazel_rules_dotnet//dotnet:defs.bzl", "dotnet_binary")
+
+dotnet_binary(
+    name = "mbom_generator",
+    srcs = ["src/mbom_generator.cs"],
+)
+
+dotnet_binary(
+    name = "audit_trail",
+    srcs = ["src/audit_trail.cs"],
+)

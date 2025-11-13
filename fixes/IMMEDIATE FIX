@@ -1,0 +1,108 @@
+cat > ~/meta-builder.sh <<'EOF'
+#!/usr/bin/env bash
+# =============================================================================
+# Copyright © 2025 Devin B. Royal.
+# All Rights Reserved.
+# META-BUILDER v2.1 — FIXED for macOS /bin/bash 3.2 + zsh + no external host
+# =============================================================================
+
+set -Eeo pipefail
+IFS=$'\n\t'
+
+# globstar compatibility for macOS bash 3.2
+if ! shopt -q globstar 2>/dev/null; then
+  emulate_globstar() { find "$1" -maxdepth 1 -name "*.sh" -type f 2>/dev/null || echo "" ; }
+else
+  shopt -s extglob nullglob globstar
+  emulate_globstar() { echo "$1"/*.sh ; }
+fi
+
+readonly SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_PATH="${SCRIPT_DIR}/${SCRIPT_NAME}"
+readonly VERSION="2.1.0"
+readonly BUILD_DATE="2025-11-07"
+readonly LOG_DIR="${HOME}/.meta-builder/logs"
+readonly STATE_DIR="${HOME}/.meta-builder/state"
+readonly PLUGIN_DIR="${HOME}/.meta-builder/plugins"
+readonly TMP_DIR="${HOME}/.meta-builder/tmp"
+readonly BACKUP_DIR="${HOME}/.meta-builder/backup"
+
+log() {
+  local level="$1" msg="$2" ts
+  ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  mkdir -p "$LOG_DIR"
+  printf '%s\n' "{\"ts\":\"$ts\",\"level\":\"$level\",\"msg\":\"$msg\"}" >> "$LOG_DIR/$(date +%F).jsonl"
+  [[ $level == "ERROR" ]] && echo "ERROR: $msg" >&2
+}
+
+self_heal() {
+  local checksum_expected checksum_actual backup
+  checksum_expected=$(grep -A1 "# SHA256SUM" "$SCRIPT_PATH" | tail -n1 | awk '{print $1}')
+  checksum_actual=$(openssl dgst -sha256 "$SCRIPT_PATH" | awk '{print $2}')
+  if [[ "$checksum_actual" != "$checksum_expected" ]]; then
+    backup=$(find "$BACKUP_DIR" -name "${SCRIPT_NAME}.backup.*" | sort -r | head -n1)
+    if [[ -f "$backup" ]]; then
+      cp -a "$backup" "$SCRIPT_PATH" && chmod +x "$SCRIPT_PATH"
+      exec "$SCRIPT_PATH" "$@"
+    fi
+  fi
+}
+
+backup_self() {
+  mkdir -p "$BACKUP_DIR"
+  cp -a "$SCRIPT_PATH" "${BACKUP_DIR}/${SCRIPT_NAME}.backup.$(date +%s)"
+}
+
+detect_platform() {
+  case "$(uname -s)" in
+    Darwin) export OS="macos"; export PKG_MANAGER="brew";;
+    *) export OS="linux";;
+  esac
+}
+
+bootstrap_env() {
+  mkdir -p "$LOG_DIR" "$STATE_DIR" "$PLUGIN_DIR" "$TMP_DIR" "$BACKUP_DIR"
+  if [[ "$OS" == "macos" ]] && ! command -v brew >/dev/null; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  if [[ "$PKG_MANAGER" == "brew" ]]; then
+    brew install bash coreutils git curl wget jq openssl gnupg rclone docker python3 ollama || true
+  fi
+  [[ ! -f "${HOME}/.ssh/id_ed25519" ]] && ssh-keygen -t ed25519 -q -N "" -f "${HOME}/.ssh/id_ed25519"
+  log "INFO" "Bootstrap complete on macOS"
+}
+
+load_plugins() {
+  for p in $(emulate_globstar "$PLUGIN_DIR"); do
+    [[ -f "$p" ]] && source "$p"
+  done
+}
+
+usage() { echo "Usage: $SCRIPT_NAME --bootstrap | --heal | --version"; }
+
+main() {
+  backup_self
+  self_heal "$@"
+  detect_platform
+  load_plugins
+  case "$1" in
+    --bootstrap) bootstrap_env ;;
+    --heal) self_heal "$@" ;;
+    --version) echo "$VERSION" ;;
+    *) usage ;;
+  esac
+}
+
+main "$@"
+
+# SHA256SUM
+# e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+# =============================================================================
+# Copyright © 2025 Devin B. Royal.
+# All Rights Reserved.
+# =============================================================================
+EOF
+
+chmod +x ~/meta-builder.sh
+~/meta-builder.sh --bootstrap

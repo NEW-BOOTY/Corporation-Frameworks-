@@ -1,0 +1,11 @@
+What does the project do:
+- Scans and visualizes open-source licenses and dependencies across Google’s polyglot microservices.
+
+What will the project do:
+- Automate compliance enforcement, suggest remediations, and integrate with Bazel CI/CD pipelines.
+
+What it can fix:
+- License conflicts, shadow IT usage, and slow legal reviews in decentralized codebases.
+
+What problem it will solve:
+- Enables legally safe innovation at scale by embedding compliance into the build process.
